@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Education and Work Dashboard, 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#182338;
+    --ink-soft:#4b5568;
+    --paper:#f4f2ea;
+    --paper-raised:#fbfaf5;
+    --line:#d9d5c7;
+    --gold:#a97a1e;
+    --gold-soft:#f0e2c2;
+    --teal:#2c6c66;
+    --teal-soft:#dcebe8;
+    --clay:#9c4a30;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px 64px;}
+  header.masthead{
+    padding:40px 32px 28px;
+    border-bottom:2px solid var(--ink);
+    max-width:1180px;
+    margin:0 auto;
+  }
+  .kicker{
+    font-size:12px;
+    letter-spacing:0.04em;
+    color:var(--ink-soft);
+    margin:0 0 10px;
+  }
+  h1{
+    font-family:'Fraunces',Georgia,serif;
+    font-weight:500;
+    font-size:38px;
+    line-height:1.12;
+    margin:0 0 12px;
+    max-width:760px;
+  }
+  .sub{
+    font-size:15px;
+    color:var(--ink-soft);
+    max-width:640px;
+    line-height:1.55;
+    margin:0;
+  }
+  nav.tabs{
+    display:flex;
+    gap:4px;
+    flex-wrap:wrap;
+    margin:28px 0 0;
+    border-bottom:1px solid var(--line);
+    padding-bottom:0;
+  }
+  nav.tabs button{
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:14px;
+    font-weight:500;
+    background:none;
+    border:none;
+    color:var(--ink-soft);
+    padding:12px 16px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    margin-bottom:-1px;
+  }
+  nav.tabs button.active{
+    color:var(--ink);
+    border-bottom:2px solid var(--gold);
+  }
+  nav.tabs button:hover{color:var(--ink);}
+  section.page{display:none;padding-top:32px;}
+  section.page.active{display:block;}
+  h2.page-title{
+    font-family:'Fraunces',Georgia,serif;
+    font-weight:500;
+    font-size:24px;
+    margin:0 0 6px;
+  }
+  p.page-sub{
+    font-size:14px;
+    color:var(--ink-soft);
+    margin:0 0 28px;
+    max-width:680px;
+    line-height:1.5;
+  }
+  .kpi-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-bottom:36px;
+  }
+  .kpi{
+    background:var(--paper-raised);
+    padding:18px 18px 16px;
+    border-top:3px solid var(--gold);
+  }
+  .kpi.alt{border-top:3px solid var(--teal);}
+  .kpi-label{
+    font-size:11.5px;
+    color:var(--ink-soft);
+    line-height:1.35;
+    margin:0 0 10px;
+    min-height:30px;
+  }
+  .kpi-value{
+    font-family:'Fraunces',Georgia,serif;
+    font-size:28px;
+    font-weight:500;
+    margin:0 0 4px;
+  }
+  .kpi-note{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin:0;
+  }
+  .kpi-note.up{color:var(--teal);}
+  .kpi-note.down{color:var(--clay);}
+  .grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+    margin-bottom:32px;
+  }
+  .grid-3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+    margin-bottom:32px;
+  }
+  @media (max-width:860px){
+    .grid-2, .grid-3{grid-template-columns:1fr;}
+  }
+  .panel{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    padding:20px 22px 16px;
+  }
+  .panel h3{
+    font-size:14px;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .panel .panel-sub{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin:0 0 14px;
+  }
+  .chart-box{position:relative;width:100%;}
+  .insights{
+    margin-top:8px;
+    border-top:1px solid var(--line);
+    padding-top:20px;
+  }
+  .insights h3{
+    font-family:'Fraunces',Georgia,serif;
+    font-weight:500;
+    font-size:17px;
+    margin:0 0 14px;
+  }
+  .insight{
+    display:flex;
+    gap:12px;
+    padding:12px 0;
+    border-top:1px solid var(--line);
+    font-size:13.5px;
+    line-height:1.55;
+  }
+  .insight:first-of-type{border-top:none;}
+  .insight .mark{
+    color:var(--gold);
+    font-family:'Fraunces',Georgia,serif;
+    font-size:18px;
+    line-height:1.3;
+    flex-shrink:0;
+  }
+  .caveat{
+    margin-top:40px;
+    padding:16px 20px;
+    background:var(--gold-soft);
+    border-left:3px solid var(--gold);
+    font-size:12.5px;
+    color:#5c4416;
+    line-height:1.6;
+  }
+  .legend{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    margin-bottom:10px;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  .legend span{display:flex;align-items:center;gap:6px;}
+  .legend i{width:10px;height:10px;display:inline-block;border-radius:2px;}
+  footer{
+    margin-top:48px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-size:11.5px;
+    color:var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="kicker">Portfolio dashboard — Education and Work dataset, 2025 · Prepared by Emie Ann Varghese</p>
+  <h1>The national talent pipeline, at a glance</h1>
+  <p class="sub">Persons aged 15&ndash;74, national survey estimates in &lsquo;000s. Framed for an education-sector CEO and CFO as strategic market intelligence.</p>
+  <nav class="tabs" id="tabnav"></nav>
+</header>
+
+<div class="wrap">
+
+  <section class="page active" id="page-overview">
+    <h2 class="page-title">Executive summary</h2>
+    <p class="page-sub">Ten headline indicators drawn across all 35 source tables, plus the two trends leadership should track.</p>
+    <div class="kpi-grid" id="kpi-grid"></div>
+    <div class="grid-2">
+      <div class="panel">
+        <h3>Non-school qualification holders, 2016&ndash;2025</h3>
+        <p class="panel-sub">Persons aged 15&ndash;74 with any non-school qualification, by sex ('000)</p>
+        <div class="legend">
+          <span><i style="background:#1b2a4a"></i>Male</span>
+          <span><i style="background:#a97a1e"></i>Female</span>
+        </div>
+        <div class="chart-box" style="height:260px;"><canvas id="chartQualTrend"></canvas></div>
+      </div>
+      <div class="panel">
+        <h3>Bachelor degree or above, share of population</h3>
+        <p class="panel-sub">Proportion of persons 15&ndash;74 by sex, 2016&ndash;2025 (%)</p>
+        <div class="legend">
+          <span><i style="background:#1b2a4a"></i>Male</span>
+          <span><i style="background:#a97a1e"></i>Female</span>
+        </div>
+        <div class="chart-box" style="height:260px;"><canvas id="chartBachelorGap"></canvas></div>
+      </div>
+    </div>
+    <div class="insights">
+      <h3>What this means for the business</h3>
+      <div class="insight"><span class="mark">&mdash;</span><span>Non-school qualification attainment has climbed every year since 2016, from 10.49m to 12.87m holders nationally &mdash; the qualification pipeline is deepening, not just widening.</span></div>
+      <div class="insight"><span class="mark">&mdash;</span><span>Female bachelor-degree-or-above attainment has led male in every year of the 2016&ndash;2025 series, and the gap has widened from 4.3 points to 7.3 points &mdash; talent supply at the top qualification tier is increasingly female-skewed.</span></div>
+      <div class="insight"><span class="mark">&mdash;</span><span>Apprenticeship starts have stayed flat around 240&ndash;270k while unmet demand has climbed from 51k to 66k since 2015 &mdash; a pipeline constraint, not a demand problem, worth flagging to leadership.</span></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-study">
+    <h2 class="page-title">Study participation and engagement</h2>
+    <p class="page-sub">Who is currently enrolled, where, and how fully engaged young Australians are in study or work.</p>
+    <div class="grid-2">
+      <div class="panel">
+        <h3>Current study enrolment by state</h3>
+        <p class="panel-sub">Persons currently enrolled in study, by sex, May 2025 ('000)</p>
+        <div class="legend">
+          <span><i style="background:#1b2a4a"></i>Male</span>
+          <span><i style="background:#a97a1e"></i>Female</span>
+        </div>
+        <div class="chart-box" style="height:300px;"><canvas id="chartStudyState"></canvas></div>
+      </div>
+      <div class="panel">
+        <h3>Youth full engagement rate by state</h3>
+        <p class="panel-sub">Share of persons aged 15&ndash;24 fully engaged in work and/or study (%)</p>
+        <div class="chart-box" style="height:300px;"><canvas id="chartEngagementState"></canvas></div>
+      </div>
+    </div>
+    <div class="insights">
+      <h3>What this means for the business</h3>
+      <div class="insight"><span class="mark">&mdash;</span><span>Current enrolment skews female in every state observed &mdash; NSW shows 573k female against 503k male &mdash; course design and marketing built around a male-leaning cohort works against the actual base.</span></div>
+      <div class="insight"><span class="mark">&mdash;</span><span>Nationally, 73.9% of 15&ndash;24 year olds are fully engaged in work or study, but engagement varies meaningfully by state and remoteness &mdash; a genuine regional-investment signal.</span></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-attainment">
+    <h2 class="page-title">Educational attainment</h2>
+    <p class="page-sub">The stock of qualifications already held across the population, nationally and by state.</p>
+    <div class="grid-2">
+      <div class="panel">
+        <h3>Highest educational attainment, Australia</h3>
+        <p class="panel-sub">Share of persons 15&ndash;74 by highest level held (%)</p>
+        <div class="chart-box" style="height:340px;"><canvas id="chartAttainLevels"></canvas></div>
+      </div>
+      <div class="panel">
+        <h3>Bachelor degree or above, by state</h3>
+        <p class="panel-sub">Share of persons 15&ndash;74 holding a bachelor's degree or higher (%)</p>
+        <div class="chart-box" style="height:340px;"><canvas id="chartAttainState"></canvas></div>
+      </div>
+    </div>
+    <div class="insights">
+      <h3>What this means for the business</h3>
+      <div class="insight"><span class="mark">&mdash;</span><span>Roughly 81% of the population holds Year 12 or above; a third (33.8%) hold a bachelor's degree or higher &mdash; the entry-level cohort without post-school qualifications is shrinking as a share of the population.</span></div>
+      <div class="insight"><span class="mark">&mdash;</span><span>ACT stands well above every other jurisdiction on bachelor-plus attainment (46.4% vs a 33.8% national average) &mdash; a genuine regional-investment signal once reliability margins are checked, not noise.</span></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-quals">
+    <h2 class="page-title">Non-school qualifications and field of study</h2>
+    <p class="page-sub">What people are studying now, and where the fastest-growing fields sit.</p>
+    <div class="grid-2">
+      <div class="panel">
+        <h3>Field of current study, 2025</h3>
+        <p class="panel-sub">Share of all persons currently studying for a non-school qualification (%)</p>
+        <div class="chart-box" style="height:340px;"><canvas id="chartFields"></canvas></div>
+      </div>
+      <div class="panel">
+        <h3>Field share, 2015 vs 2025</h3>
+        <p class="panel-sub">Percentage-point change in study share by field, largest movers</p>
+        <div class="chart-box" style="height:340px;"><canvas id="chartFieldGrowth"></canvas></div>
+      </div>
+    </div>
+    <div class="insights">
+      <h3>What this means for the business</h3>
+      <div class="insight"><span class="mark">&mdash;</span><span>Information technology has grown faster than any other field of current study &mdash; its share nearly doubled from 3.2% to 5.6% of all current students between 2015 and 2025.</span></div>
+      <div class="insight"><span class="mark">&mdash;</span><span>Management and commerce has lost the most share over the same period, down from 23.1% to 17.3% &mdash; a signal that program investment weighted toward legacy business courses may be lagging student demand.</span></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-apprentice">
+    <h2 class="page-title">Apprenticeships and the skills pipeline</h2>
+    <p class="page-sub">Trade and vocational pathways, and how qualifications translate into skilled work.</p>
+    <div class="grid-2">
+      <div class="panel">
+        <h3>Apprentices and trainees vs unmet demand</h3>
+        <p class="panel-sub">Estimated persons 15&ndash;74, 2015&ndash;2025 ('000)</p>
+        <div class="legend">
+          <span><i style="background:#1b2a4a"></i>Apprentices/trainees</span>
+          <span><i style="background:#9c4a30"></i>Unmet demand</span>
+        </div>
+        <div class="chart-box" style="height:300px;"><canvas id="chartApprentice"></canvas></div>
+      </div>
+      <div class="panel">
+        <h3>Employed persons by occupation skill level</h3>
+        <p class="panel-sub">Share of employed persons 15&ndash;74, current job (%)</p>
+        <div class="chart-box" style="height:300px;"><canvas id="chartSkillLevel"></canvas></div>
+      </div>
+    </div>
+    <div class="insights">
+      <h3>What this means for the business</h3>
+      <div class="insight"><span class="mark">&mdash;</span><span>Apprenticeship participation has stayed roughly 75&ndash;85% male across the full 2015&ndash;2025 series &mdash; a persistent structural gap rather than a one-year anomaly.</span></div>
+      <div class="insight"><span class="mark">&mdash;</span><span>47% of employed people work in the two highest occupation skill tiers &mdash; slightly under half the workforce, with the remainder split across mid- and lower-skill roles.</span></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-trends">
+    <h2 class="page-title">Time trends, 2015&ndash;2025</h2>
+    <p class="page-sub">The decade view: how attainment and the qualification base have shifted year on year.</p>
+    <div class="grid-2">
+      <div class="panel">
+        <h3>Non-school qualification attainment rate</h3>
+        <p class="panel-sub">Persons with a non-school qualification, share of population 15&ndash;74 (%)</p>
+        <div class="chart-box" style="height:280px;"><canvas id="chartTrendQualRate"></canvas></div>
+      </div>
+      <div class="panel">
+        <h3>Gender gap in bachelor-plus attainment</h3>
+        <p class="panel-sub">Female share minus male share, percentage points, 2016&ndash;2025</p>
+        <div class="chart-box" style="height:280px;"><canvas id="chartTrendGenderGap"></canvas></div>
+      </div>
+    </div>
+    <div class="insights">
+      <h3>What this means for the business</h3>
+      <div class="insight"><span class="mark">&mdash;</span><span>The 2020&ndash;2021 period shows a visible dip in apprenticeship proportions and some study series before recovering &mdash; worth annotating as a COVID-era disruption rather than treating as a data error.</span></div>
+      <div class="insight"><span class="mark">&mdash;</span><span>Female bachelor-plus holders grew faster than male over the decade &mdash; +52% (2.50m to 3.80m) versus +43% (2.08m to 2.98m) for male &mdash; a structural, not cyclical, shift in qualification supply.</span></div>
+    </div>
+  </section>
+
+  <p class="caveat">Data caveat: source cell values have been randomly perturbed to preserve confidentiality, so component figures will not sum exactly to published totals. Age bands are not consistent across all 35 source tables. Figures shown here are drawn directly from the supplied 2025 workbooks (Tables 1, 5, 9, 10, 15&ndash;17, 21, 26, 32, 35); state and territory tables carry wider margins of error for smaller jurisdictions (NT, Tas., ACT).</p>
+
+  <footer>Source: Education and Work dataset, 2025. Portfolio dashboard prepared by Emie Ann Varghese.</footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const INK = '#1b2a4a';
+const GOLD = '#a97a1e';
+const TEAL = '#2c6c66';
+const CLAY = '#9c4a30';
+const GRID = '#e4e0d2';
+const TEXT = '#4b5568';
+
+Chart.defaults.font.family = "'IBM Plex Sans', Arial, sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = TEXT;
+
+const tabs = [
+  {id:'overview', label:'Overview'},
+  {id:'study', label:'Study & engagement'},
+  {id:'attainment', label:'Attainment'},
+  {id:'quals', label:'Qualifications & fields'},
+  {id:'apprentice', label:'Apprenticeships & skills'},
+  {id:'trends', label:'Time trends'}
+];
+const nav = document.getElementById('tabnav');
+tabs.forEach((t,i) => {
+  const b = document.createElement('button');
+  b.textContent = t.label;
+  if(i===0) b.classList.add('active');
+  b.addEventListener('click', () => {
+    document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('section.page').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById('page-'+t.id).classList.add('active');
+  });
+  nav.appendChild(b);
+});
+
+const kpis = [
+  {label:'Population, aged 15\u201374', value:'20.06m', note:'National base for all rates below', alt:false},
+  {label:'Current study participation rate', value:'16.4%', note:'3.29m persons currently enrolled', alt:false},
+  {label:'Year 12 or equivalent attainment', value:'80.9%', note:'Of persons 15\u201374', alt:false},
+  {label:'Bachelor degree or above attainment', value:'33.8%', note:'Up from 25.8% in 2016', alt:true},
+  {label:'Non-school qualification attainment', value:'64.1%', note:'Up from 58.9% in 2016', alt:true},
+  {label:'Apprentices & trainees, 2025', value:'245.8k', note:'191k male, 54.8k female', alt:false},
+  {label:'Unmet apprenticeship demand, 2025', value:'65.8k', note:'Up from 50.6k in 2015', alt:false},
+  {label:'Youth full engagement rate (15\u201324)', value:'73.9%', note:'Employed and/or studying', alt:true},
+  {label:'Gender gap, bachelor+ attainment', value:'7.3 pts', note:'Female ahead, widened from 4.3 pts (2016)', alt:true},
+  {label:'Fastest-growing field of study', value:'IT', note:'3.2% \u2192 5.6% of current study, 2015\u201325', alt:false},
+  {label:'Skilled-occupation employment share', value:'47.3%', note:'Skill level 1\u20132 occupations', alt:false}
+];
+const grid = document.getElementById('kpi-grid');
+kpis.forEach(k => {
+  const d = document.createElement('div');
+  d.className = 'kpi' + (k.alt ? ' alt' : '');
+  d.innerHTML = `<p class="kpi-label">${k.label}</p><p class="kpi-value">${k.value}</p><p class="kpi-note">${k.note}</p>`;
+  grid.appendChild(d);
+});
+
+function baseGrid(axis){
+  return { color: GRID, drawTicks:false };
+}
+
+new Chart(document.getElementById('chartQualTrend'), {
+  type:'line',
+  data:{
+    labels:[2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],
+    datasets:[
+      {label:'Male', data:[5301.5,5416.8,5513,5652.3,5801,5834,5924.2,6034.1,6152.8,6271.1], borderColor:INK, backgroundColor:'transparent', tension:0.25, borderWidth:2},
+      {label:'Female', data:[5189.4,5336.8,5556.5,5728.2,5907.9,5917.5,6075.3,6302.1,6376.7,6599.4], borderColor:GOLD, backgroundColor:'transparent', tension:0.25, borderWidth:2}
+    ]
+  },
+  options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{grid:baseGrid()}}}
+});
+
+new Chart(document.getElementById('chartBachelorGap'), {
+  type:'line',
+  data:{
+    labels:[2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],
+    datasets:[
+      {label:'Male', data:[23.6,24.1,24.5,25.9,26.8,28.3,28.8,28.1,29.7,30.1], borderColor:INK, backgroundColor:'transparent', tension:0.25, borderWidth:2},
+      {label:'Female', data:[27.9,29.7,30.1,30.9,33.3,34.2,35.2,35.7,36.9,37.4], borderColor:GOLD, backgroundColor:'transparent', tension:0.25, borderWidth:2}
+    ]
+  },
+  options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{grid:baseGrid(), ticks:{callback:v=>v+'%'}}}}
+});
+
+const states = ['NSW','Vic.','Qld','SA','WA','Tas.','NT','ACT'];
+new Chart(document.getElementById('chartStudyState'), {
+  type:'bar',
+  data:{
+    labels:states,
+    datasets:[
+      {label:'Male', data:[503.3,434.6,304.4,99.1,151.2,25.9,10.7,29.9], backgroundColor:INK},
+      {label:'Female', data:[572.5,456.8,341.2,115.3,172.7,33.5,14.5,33.6], backgroundColor:GOLD}
+    ]
+  },
+  options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{grid:baseGrid()}}}
+});
+
+new Chart(document.getElementById('chartEngagementState'), {
+  type:'bar',
+  data:{
+    labels:states,
+    datasets:[{label:'Fully engaged', data:[76.6,75.9,71.1,69.8,73.2,61.8,75.0,78.9], backgroundColor:TEAL}]
+  },
+  options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{grid:baseGrid(), ticks:{callback:v=>v+'%'}, max:100}}}
+});
+
+new Chart(document.getElementById('chartAttainLevels'), {
+  type:'bar',
+  data:{
+    labels:['Postgraduate','Grad dip/cert','Bachelor degree','Adv diploma/diploma','Certificate III/IV','Year 12 or equiv.','Year 11','Year 10','Year 9 or below'],
+    datasets:[{label:'Share of population', data:[8.9,3.6,21.3,9.4,15.6,18.6,4.8,9.0,5.3], backgroundColor:GOLD}]
+  },
+  options:{indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:baseGrid(), ticks:{callback:v=>v+'%'}}, y:{grid:{display:false}}}}
+});
+
+new Chart(document.getElementById('chartAttainState'), {
+  type:'bar',
+  data:{
+    labels:['NSW','Vic.','Qld','SA','WA','Tas.','NT','ACT','Aust.'],
+    datasets:[{label:'Bachelor+', data:[36.0,37.3,29.1,28.9,30.7,27.2,35.4,46.4,33.8], backgroundColor:(ctx)=>ctx.raw && ctx.dataset.data[ctx.dataIndex]===33.8 ? TEAL : INK}]
+  },
+  options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{grid:baseGrid(), ticks:{callback:v=>v+'%'}}}}
+});
+
+new Chart(document.getElementById('chartFields'), {
+  type:'bar',
+  data:{
+    labels:['Society & culture','Management & commerce','Health','Engineering','Education','IT','Natural sciences','Architecture & building','Creative arts','Food, hospitality & personal services','Agriculture & environmental'],
+    datasets:[{label:'Share', data:[20.9,17.3,15.8,11.1,8.1,5.6,5.1,4.7,4.0,2.7,1.8], backgroundColor:GOLD}]
+  },
+  options:{indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:baseGrid(), ticks:{callback:v=>v+'%'}}, y:{grid:{display:false}}}}
+});
+
+new Chart(document.getElementById('chartFieldGrowth'), {
+  type:'bar',
+  data:{
+    labels:['Information technology','Engineering','Health','Education','Society & culture','Creative arts','Architecture & building','Management & commerce'],
+    datasets:[{label:'pp change 2015\u201325', data:[2.4,1.2,2.3,1.1,0.3,-2.0,-0.2,-5.8], backgroundColor:(ctx)=>ctx.raw>=0?TEAL:CLAY}]
+  },
+  options:{indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:baseGrid(), ticks:{callback:v=>v+' pts'}}, y:{grid:{display:false}}}}
+});
+
+new Chart(document.getElementById('chartApprentice'), {
+  type:'bar',
+  data:{
+    labels:[2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],
+    datasets:[
+      {label:'Apprentices/trainees', data:[194.3,186.2,185.4,196.2,217.7,194.7,193.2,243.8,266.7,259.6,245.8], backgroundColor:INK},
+      {label:'Unmet demand', data:[50.6,51.2,53.6,63.8,65.7,65.9,67.1,64.4,55.8,68.2,65.8], backgroundColor:CLAY}
+    ]
+  },
+  options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{grid:baseGrid()}}}
+});
+
+new Chart(document.getElementById('chartSkillLevel'), {
+  type:'bar',
+  data:{
+    labels:['Skill 1 (highest)','Skill 2','Skill 3','Skill 4','Skill 5 (lowest)'],
+    datasets:[{label:'Share of employed', data:[35.9,11.4,12.9,25.2,14.3], backgroundColor:TEAL}]
+  },
+  options:{indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:baseGrid(), ticks:{callback:v=>v+'%'}}, y:{grid:{display:false}}}}
+});
+
+new Chart(document.getElementById('chartTrendQualRate'), {
+  type:'line',
+  data:{
+    labels:[2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],
+    datasets:[{label:'Non-school qual. rate', data:[58.9,59.6,60.1,60.9,62.0,62.3,63.1,63.2,63.3,64.1], borderColor:GOLD, backgroundColor:'transparent', tension:0.25, borderWidth:2}]
+  },
+  options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{grid:baseGrid(), ticks:{callback:v=>v+'%'}}}}
+});
+
+new Chart(document.getElementById('chartTrendGenderGap'), {
+  type:'line',
+  data:{
+    labels:[2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],
+    datasets:[{label:'Gender gap', data:[4.3,5.6,5.6,5.0,6.5,5.9,6.4,7.6,7.2,7.3], borderColor:TEAL, backgroundColor:'transparent', tension:0.25, borderWidth:2, fill:false}]
+  },
+  options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{grid:baseGrid(), ticks:{callback:v=>v+' pts'}, min:0}}}
+});
+</script>
+</body>
+</html>
